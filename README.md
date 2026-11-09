@@ -23,7 +23,7 @@ Se usan claves primarias y foráneas, restricciones de unicidad y validación (`
 
 ## Reglas de negocio implementadas
 
-El archivo `schema.sql` incluye funciones y triggers para:
+El archivo [`sql/schema.sql`](sql/schema.sql) incluye funciones y triggers para:
 
 - Calcular el subtotal de cada detalle de orden.
 - Recalcular el total de una orden después de insertar o actualizar sus detalles.
@@ -38,16 +38,17 @@ El archivo `schema.sql` incluye funciones y triggers para:
 ecommerce-database-postgresql/
 ├── README.md
 ├── .gitignore
-├── schema.sql
-├── generar_datos.py
-├── queries/
+├── scripts/
+│   └── generar_datos.py
+├── sql/
+│   ├── schema.sql
 │   ├── console_1_1k.sql
 │   ├── console_1_10k.sql
 │   ├── console_1_100k.sql
 │   └── console_1_1m.sql
 └── docs/
     ├── er_diagram.png
-    └── Proyecto_2_BD_1_Grupo_3.pdf  # opcional; revisar datos personales
+    └── Proyecto_2_BD_1_Grupo_3.pdf
 ```
 
 **Los archivos `dump_*.sql` no se incluyen en el repositorio:** pueden recrearse con el generador y contienen filas sintéticas con campos que parecen datos personales. Así evitamos cargar archivos muy grandes y publicar información innecesaria.
@@ -73,13 +74,13 @@ python3 -m pip install psycopg2-binary Faker
 2. Aplicar el esquema (incluye los triggers):
 
    ```bash
-   psql -d ecommerce_1k -f schema.sql
+   psql -d ecommerce_1k -f sql/schema.sql
    ```
 
 3. Generar datos sintéticos:
 
    ```bash
-   python3 generar_datos.py --escenario 1k --dbname ecommerce_1k --host localhost --user postgres --password TU_PASSWORD
+   python3 scripts/generar_datos.py --escenario 1k --dbname ecommerce_1k --host localhost --user postgres --password TU_PASSWORD
    ```
 
    Sustituye `TU_PASSWORD` por la contraseña de tu **instancia local de prueba**. El argumento `--password` del script puede quedar visible en el historial del terminal y en la lista de procesos; **no uses credenciales de producción**. Antes de usarlo fuera de un entorno académico local, es recomendable cambiar el script para usar variables de entorno o un mecanismo seguro de autenticación.
@@ -96,13 +97,13 @@ El generador acepta los escenarios `1k`, `10k`, `100k` y `1m` (cantidad objetivo
 
 ## Consultas y experimentación
 
-Los archivos de `queries/` incluyen una consulta de análisis de cupones próximos a vencer y productos sin stock, además de la creación de índices y `EXPLAIN ANALYZE`.
+Los archivos de [`sql/`](sql/) incluyen una consulta de análisis de cupones próximos a vencer y productos sin stock, además de la creación de índices y `EXPLAIN ANALYZE`.
 
 - Se trabajó con escenarios de **1.000, 10.000, 100.000 y 1.000.000 de órdenes**.
 - El informe del proyecto documenta la metodología, planes de consulta y comparación de tiempos con y sin índices.
 - **No todas las consultas mejoran con índices:** el resultado depende de la selectividad, las estadísticas y el plan de ejecución.
 
-**Para reproducir una comparación justa**, ejecutar primero las consultas sin índices, registrar el plan y el tiempo; después crear los índices, actualizar estadísticas (`ANALYZE`) y repetir la medición. Los scripts `console_1_*.sql` incluidos crean índices directamente, por lo que **no representan por sí solos una comparación antes/después**; además, si se vuelven a ejecutar sin limpiar los índices, las sentencias `CREATE INDEX` pueden fallar porque ya existen.
+**Para reproducir una comparación justa**, ejecutar primero las consultas sin índices, registrar el plan y el tiempo; después crear los índices, actualizar estadísticas (`ANALYZE`) y repetir la medición. Los scripts `sql/console_1_*.sql` incluidos crean índices directamente, por lo que **no representan por sí solos una comparación antes/después**; además, si se vuelven a ejecutar sin limpiar los índices, las sentencias `CREATE INDEX` pueden fallar porque ya existen.
 
 ## Equipo
 
@@ -114,4 +115,4 @@ Proyecto grupal desarrollado para el curso **Base de Datos I**, UTEC, ciclo 2026
 
 ## Informe
 
-El informe académico explica los requisitos, el modelo entidad-relación, el modelo relacional, la implementación, los experimentos y las conclusiones. Se puede añadir en `docs/` una copia revisada que no exponga códigos universitarios ni enlaces privados innecesarios.
+El informe académico explica los requisitos, el modelo entidad-relación, el modelo relacional, la implementación, los experimentos y las conclusiones. El informe se encuentra en [`docs/Proyecto_2_BD_1_Grupo_3.pdf`](docs/Proyecto_2_BD_1_Grupo_3.pdf).
