@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+pgpass.conf
+.pgpass
+
+# Database exports, snapshots and generated datasets
+# Keep source SQL (schema, queries, indexes) tracked.
+dump_*.sql
+*.dump
+*.backup
+*.bak
+*.sqlite
+*.sqlite3
+*.db
+*.csv
+*.tsv
+*.parquet
+
+# Benchmark outputs and temporary files
+*.log
+results/
+benchmarks/output/
+output/
+tmp/
+temp/
+
+# IDE / operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# PDF report and ER diagram may be committed under docs/ intentionally.
